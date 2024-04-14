@@ -8,8 +8,10 @@ Author URI: https://hectorguedea.com
 Plugin URI: https://hectorguedea.com/images-swap-plugin
 */
 
+define('IMAGE_SWAP_VERSION', '1.0');
+
 function image_swap_plugin_settings_link( $links ) {
-    $settings_link = '<a href="tools.php?page=image-swap-plugin-settings">Settings</a>';
+    $settings_link = '<a href="' . esc_url(admin_url('tools.php?page=image-swap-plugin-settings')) . '">Settings</a>';
     array_unshift( $links, $settings_link );
     return $links;
 }
@@ -17,27 +19,28 @@ add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'image_swap_pl
 
 function image_swap_plugin_enqueue_script() {
 
+    if (!is_admin()){
     $plugin_url = plugin_dir_url( __FILE__ );
 
-    wp_enqueue_script( 'imageSwap-script', $plugin_url . 'js/script.js', array( 'jquery' ), null, true );
+    wp_enqueue_script( 'imageSwap-script', esc_url($plugin_url . 'js/script.js'), array( 'jquery' ), IMAGE_SWAP_VERSION, true );
     wp_localize_script( 'imageSwap-script', 'imageSwapScriptSettings', array(
-        'toggleImg' => get_option('image_swap_toggle_img', 'toggle-img'),
-        'toggleBg' => get_option('image_swap_toggle_bg', 'toggle-bg'),
-        'accordionItem' => get_option('image_swap_accordion_item', 'e-n-accordion-item'),
-        'linkItem' => get_option('image_swap_link_item', 'imageSwap'),
-        'effect' => get_option('image_swap_transition_effect', 'fade'),
-        'transitionTime' => get_option('image_swap_transition_time', 'fast') 
+        'toggleImg' => esc_js(get_option('image_swap_toggle_img', 'toggle-img')),
+        'toggleBg' => esc_js(get_option('image_swap_toggle_bg', 'toggle-bg')),
+        'accordionItem' => esc_js(get_option('image_swap_accordion_item', 'e-n-accordion-item')),
+        'linkItem' => esc_js(get_option('image_swap_link_item', 'imageSwap')),
+        'effect' => esc_js(get_option('image_swap_transition_effect', 'fade')),
+        'transitionTime' => esc_js(get_option('image_swap_transition_time', 'fast')) 
     ));
 
-    wp_enqueue_style( 'imageSwap-styles', $plugin_url . '/css/image-swap-styles.css' );
+    wp_enqueue_style( 'imageSwap-styles', esc_url($plugin_url . '/css/image-swap-styles.css'), array(), IMAGE_SWAP_VERSION );
+  }
 }
 add_action( 'wp_enqueue_scripts', 'image_swap_plugin_enqueue_script' );
 
-// Función para agregar la página de configuración al panel de administración
 function image_swap_plugin_settings_page() {
     add_management_page(
-        'Images Swap',
-        'Images Swap',
+        esc_html__('Images Swap', 'images-swap'),
+        esc_html__('Images Swap', 'images-swap'),
         'manage_options',
         'image-swap-plugin-settings',
         'image_swap_plugin_settings_page_content'
@@ -53,7 +56,6 @@ function image_swap_plugin_settings_page_content() {
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             background-color: #fff;
-			
         }
 
         .card-body {
@@ -61,8 +63,8 @@ function image_swap_plugin_settings_page_content() {
         }
 
     </style>
-        <div class="wrap">
-        <h2>Images Swap Plugin</h2>
+    <div class="wrap">
+        <h2><?php echo esc_html__('Images Swap Plugin', 'images-swap'); ?></h2>
         <form method="post" action="options.php">
             <div class="card">
                 <div class="card-body">
@@ -71,8 +73,8 @@ function image_swap_plugin_settings_page_content() {
                     <?php submit_button(); ?>
                 </div>
             </div>
-         </form>
-        </div>
+        </form>
+    </div>
     <?php
 }
 
@@ -84,20 +86,16 @@ function image_swap_plugin_register_settings() {
     register_setting( 'image_swap_plugin_settings', 'image_swap_transition_effect' );
     register_setting( 'image_swap_plugin_settings', 'image_swap_transition_time' ); 
 
-    add_settings_section( 'image_swap_plugin_main_section', 'Images Swap Settings', '__return_false', 'image_swap_plugin_settings' );
+    add_settings_section( 'image_swap_plugin_main_section', esc_html__('Images Swap Settings', 'images-swap'), '__return_false', 'image_swap_plugin_settings' );
 
-    add_settings_field( 'image_swap_toggle_img', 'Toggle Image Class', 'image_swap_toggle_img_callback', 'image_swap_plugin_settings', 'image_swap_plugin_main_section' );
-    add_settings_field( 'image_swap_toggle_bg', 'Toggle Background Class', 'image_swap_toggle_bg_callback', 'image_swap_plugin_settings', 'image_swap_plugin_main_section' );
-    add_settings_field( 'image_swap_accordion_item', 'Accordion Elementor Item Class', 'image_swap_accordion_item_callback', 'image_swap_plugin_settings', 'image_swap_plugin_main_section' );
-
-    add_settings_field( 'image_swap_link_item', 'Link Item Class', 'image_swap_link_item_callback', 'image_swap_plugin_settings', 'image_swap_plugin_main_section' );
-
-    add_settings_field( 'image_swap_transition_effect', 'Transition Effect', 'image_swap_transition_effect_callback', 'image_swap_plugin_settings', 'image_swap_plugin_main_section' );
-
-    add_settings_field( 'image_swap_transition_time', 'Transition Time', 'image_swap_transition_time_callback', 'image_swap_plugin_settings', 'image_swap_plugin_main_section' ); 
-
-
+    add_settings_field( 'image_swap_toggle_img', esc_html__('Toggle Image Class', 'images-swap'), 'image_swap_toggle_img_callback', 'image_swap_plugin_settings', 'image_swap_plugin_main_section' );
+    add_settings_field( 'image_swap_toggle_bg', esc_html__('Toggle Background Class', 'images-swap'), 'image_swap_toggle_bg_callback', 'image_swap_plugin_settings', 'image_swap_plugin_main_section' );
+    add_settings_field( 'image_swap_accordion_item', esc_html__('Accordion Elementor Item Class', 'images-swap'), 'image_swap_accordion_item_callback', 'image_swap_plugin_settings', 'image_swap_plugin_main_section' );
+    add_settings_field( 'image_swap_link_item', esc_html__('Link Item Class', 'images-swap'), 'image_swap_link_item_callback', 'image_swap_plugin_settings', 'image_swap_plugin_main_section' );
+    add_settings_field( 'image_swap_transition_effect', esc_html__('Transition Effect', 'images-swap'), 'image_swap_transition_effect_callback', 'image_swap_plugin_settings', 'image_swap_plugin_main_section' );
+    add_settings_field( 'image_swap_transition_time', esc_html__('Transition Time', 'images-swap'), 'image_swap_transition_time_callback', 'image_swap_plugin_settings', 'image_swap_plugin_main_section' ); 
 }
+
 add_action( 'admin_init', 'image_swap_plugin_register_settings' );
 
 function image_swap_toggle_img_callback() {
@@ -123,14 +121,14 @@ function image_swap_link_item_callback() {
 function image_swap_transition_effect_callback() {
     $effects = array(
         'fade' => 'Fade',
-        'zoomIn' => 'zoomIn',
-        'zoomOut' => 'zoomOut'
+        'zoomIn' => 'Zoom In',
+        'zoomOut' => 'Zoom Out'
     );
     $selected_effect = get_option('image_swap_transition_effect', 'fade');
 
     echo "<select name='image_swap_transition_effect'>";
     foreach ($effects as $key => $value) {
-        echo "<option value='$key' " . selected( $selected_effect, $key, false ) . ">$value</option>";
+        echo "<option value='" . esc_attr($key) . "' " . selected($selected_effect, $key, false) . ">" . esc_html($value) . "</option>";
     }
     echo "</select>";
 }
@@ -139,7 +137,8 @@ function image_swap_transition_time_callback() {
     $selected_time = get_option('image_swap_transition_time', 'fast');
 
     echo "<select name='image_swap_transition_time'>";
-    echo "<option value='fast' " . selected( $selected_time, 'fast', false ) . ">Fast</option>";
-    echo "<option value='slow' " . selected( $selected_time, 'slow', false ) . ">Slow</option>";
+    echo "<option value='fast' " . selected($selected_time, 'fast', false) . ">Fast</option>";
+    echo "<option value='slow' " . selected($selected_time, 'slow', false) . ">Slow</option>";
     echo "</select>";
 }
+?>
