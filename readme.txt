@@ -1,8 +1,8 @@
 === Images Swap ===
-Contributors: Héctor Guedea
+Contributors: hectorguedea
+Donate link: https://hectorguedea.com/donate
 Plugin Name: Images Swap
 Plugin URI: https://hectorguedea.com/images-swap-plugin
-Description: Enhance your website's interactivity with Images Swap, a versatile plugin that allows for seamless image or background swapping from any link, button, or accordion across themes and page builders, including Elementor. Tailor your site's aesthetics with customizable CSS classes and dynamic transition effects.
 Version: 1.0
 Stable Tag: 1.0
 Requires at least: 5.2
@@ -12,6 +12,8 @@ Author: Héctor Guedea
 Author URI: https://hectorguedea.com
 License: GPL-2.0 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
+
+Boost interactivity with Images Swap plugin, enabling seamless image swapping across themes and builders like Elementor with customizable effects
 
 == Description ==
 
@@ -49,6 +51,11 @@ Absolutely! You can assign unique CSS classes to different elements and select d
 = Do I need to write any code to use this plugin? =
 
 No coding is required! Images Swap is designed for ease of use, with a straightforward settings interface that lets you configure everything without touching a single line of code.
+
+== Screenshots ==
+
+1. The Images Swap settings interface in the WordPress dashboard.
+2. Example of a webpage using Images Swap with a smooth transition effect.
 
 == Changelog ==
 
